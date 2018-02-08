@@ -33,6 +33,10 @@ export default {
           href: '/orders'
         },
         {
+          title: 'Blog',
+          href: '/blog'
+        },
+        {
           title: 'Lash & Brow menu',
           href: '/orders'
         },
@@ -73,7 +77,7 @@ export default {
     }
   }
   &__nav {
-    display: none;
+    display: block;
     text-align: center;
   }
 }
