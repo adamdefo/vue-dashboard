@@ -69,8 +69,8 @@ export default {
     },
     saveArticle: function () {
       this.loading = false
-      // let params = Object.assign({}, this.article)
-      this.$http.post(this.api, {params: Object.assign({}, this.article)}).then(function (response) {
+      let params = Object.assign({}, this.article)
+      this.$http.post(this.api, params).then(function (response) {
         console.log(response)
         this.loading = true
       }, function (error) {
