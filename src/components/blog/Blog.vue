@@ -25,10 +25,10 @@
         </div>
         <div class="form__group">
           <div class="form__group-item">
-            <textarea class="form__control" type="text" v-model="article.content"></textarea>
+            <textarea class="form__control form__control_txt" type="text" v-model="article.content"></textarea>
           </div>
         </div>
-        <div class="form__btn">
+        <div class="form__group form__group_btn">
           <button class="btn" type="submit">Сохранить</button>
         </div>
       </form>

@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 * {
 	box-sizing: border-box;
 }
@@ -56,8 +56,8 @@ html, body {
 
 body {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	line-height: 1.6em;
+	font-size: 15px;
+	line-height: 1.65;
 }
 
 ul, ol {
@@ -101,52 +101,78 @@ a:hover {
 	-moz-transition: height .3s cubic-bezier(.23,1,.32,1);
 	-o-transition: height .3s cubic-bezier(.23,1,.32,1);
 	transition: height .3s cubic-bezier(.23,1,.32,1); */
-}
-
-.note--show {
-	display: block;
-	opacity: 1;
-	z-index: 10000;
-}
-
-.note__txt {
-	color: #ffffff;
-	padding: .8em 3em;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: .87em;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-	font-weight: 400;
-	line-height: 1.2em;
-}
-
-.note__txt p {
-	margin: 0;
-}
-
-.note__close {
-	cursor: pointer;
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 2.8em;
-	height: 2.8em;
-	background: rgba(0,0,0,.15);
-	color: #fff;
-}
-
-.note__close:before {
-	content: '×';
-	display: block;
-	font-family: Helvetica,Arial,sans-serif;
-	font-size: 1em;
-	font-weight: 100;
-	line-height: 2.8em;
-	letter-spacing: normal;
-	padding: 0;
+	&--show {
+		display: block;
+		opacity: 1;
+		z-index: 10000;
+	}
+	&__txt {
+		color: #ffffff;
+		padding: .8em 3em;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: .87em;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		font-weight: 400;
+		line-height: 1.2em;
+		& p {
+			margin: 0;
+		}
+	}
+	&__close {
+		cursor: pointer;
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 2.8em;
+		height: 2.8em;
+		background: rgba(0,0,0,.15);
+		color: #fff;
+		&::before {
+			content: '×';
+			display: block;
+			font-family: Helvetica,Arial,sans-serif;
+			font-size: 1em;
+			font-weight: 100;
+			line-height: 2.8em;
+			letter-spacing: normal;
+			padding: 0;
+		}
+	}
 }
 
 .layout {
 	padding: 60px;
+}
+
+.form {
+	position: relative;
+	width: 100%;
+	&_add {
+		max-width: 450px;
+	}
+	&__group {
+		margin: 20px 0;
+		position: relative;
+		width: 100%;
+		&_btn {
+			margin-bottom: 0;
+		}
+	}
+	&__control {
+		border: 1px solid #dedede;
+		color: #232323;
+		font-size: 1em;
+		outline: none;
+		padding: 8px 10px;
+		width: 100%;
+		&_txt {
+			min-height: 80px;
+		}
+		&:focus {
+			border-color: rgba(5, 69, 153, .3);
+			color: #054599;
+		}
+	}
 }
 </style>
