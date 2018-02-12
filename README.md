@@ -1,6 +1,6 @@
-# todo-app
+# Dashboard App
 
-> A Vue.js project
+> Dashboard application on Vue.js
 
 ## Build Setup
 

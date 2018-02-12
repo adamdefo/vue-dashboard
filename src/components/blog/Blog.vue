@@ -6,26 +6,44 @@
         <button @click="showAddArticleForm">Добавить</button>
       </div>
     </div>
+    <div class="blog__article-list">
+      <ul>
+        <li v-for="article in articles">
+          <a href="#">{{ article.title }}</a>
+        </li>
+      </ul>
+    </div>
     <div v-if="isShowArticleForm" class="blog__form">
-      <form class="form" @submit.prevent="saveArticle">
+      <form class="form" @submit.prevent="saveArticle" enctype="multipart/form-data">
         <div class="form__group">
           <div class="form__group-item">
+            <label class="form__label">Заголовок</label>
             <input class="form__control" type="text" v-model="article.title" />
           </div>
         </div>
         <div class="form__group">
           <div class="form__group-item">
+            <label class="form__label">Краткое описание</label>
             <input class="form__control" type="text" v-model="article.meta.description" />
           </div>
         </div>
         <div class="form__group">
           <div class="form__group-item">
+            <label class="form__label">Ключевые слова</label>
             <input class="form__control" type="text" v-model="article.meta.keywords" />
           </div>
         </div>
         <div class="form__group">
           <div class="form__group-item">
+            <label class="form__label">Содержание</label>
             <textarea class="form__control form__control_txt" type="text" v-model="article.content"></textarea>
+          </div>
+        </div>
+        <div class="form__group">
+          <div class="form__group-item">
+            <label class="form__label">
+              <input class="form__control form__control_checkbox" type="checkbox" v-model="article.isDraft" /><span>черновик</span>
+            </label>
           </div>
         </div>
         <div class="form__group form__group_btn">
@@ -43,15 +61,27 @@ export default {
     return {
       api: '../api/',
       url: 'https://jsonplaceholder.typicode.com',
-      title: 'Блог',
+      title: 'Статьи',
       loading: false,
+      articles: [
+        {
+          id: 1,
+          title: 'Article 1'
+        },
+        {
+          id: 2,
+          title: 'Article 2'
+        }
+      ],
+      articleImage: '', // обложка для статьи
       article: {
         title: '',
         meta: {
           description: '',
           keywords: ''
         },
-        content: ''
+        content: '',
+        isDraft: true
       },
       isShowArticleForm: false,
       blogList: [] // список статей
@@ -59,7 +89,10 @@ export default {
   },
   methods: {
     getArticles: function () {
+      let vm = this
       this.$http.get(this.api + '?articles').then(function (response) {
+        let articles = response.data
+        vm.articles = articles.slice()
         console.log(response)
         this.loading = true
       }, function (error) {
@@ -83,6 +116,27 @@ export default {
     },
     showAddArticleForm: function () {
       this.isShowArticleForm = !this.isShowArticleForm
+    },
+    onFileChange: function (e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      this.createImage(files[0])
+    },
+    createImage: function (file) {
+      var image = new Image()
+      console.log(image)
+      var reader = new FileReader()
+      var vm = this
+
+      reader.onload = (e) => {
+        vm.articleImage = e.target.result
+      }
+      reader.readAsDataURL(file)
+    },
+    removeImage: function (e) {
+      this.articleImage = ''
     }
   },
   created: function () {
@@ -97,12 +151,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.blog {
+  &__article-list {
+    // border-left: 1px solid #dedede; 
+    & ul {
+      margin-left: 16px;
+    }
+  }
+}
+
+
 .title {
   padding: 2.5rem 0 1.5rem;
   & > h1 {
     border-bottom: 1px solid #dedede;
     margin: 0 0 1.5rem;
-    padding-bottom: 1.5rem;
   }
   &__links {
     font-size: 1.3rem;

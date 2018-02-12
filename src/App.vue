@@ -29,7 +29,7 @@ export default {
   name: 'app',
   data () {
     return {
-      showNote: true
+      showNote: false
     }
   },
   methods: {
@@ -151,14 +151,70 @@ a:hover {
 	&_add {
 		max-width: 450px;
 	}
+	&-wrapper {
+    position: relative;
+    margin: 5rem auto;
+    padding: 3rem;
+    width: 100%;
+    min-width: 300px;
+    max-width: 400px;
+  }
+  &__title {
+    font-size: 2.5rem;
+    & > h1 {
+      display: inline-block;
+      font-size: 100%;
+      margin: 0;
+    }
+    & > a {
+      float: right;
+      font-size: 1.27rem;
+      line-height: 1;
+			margin-top: 15px;
+    }
+  }
 	&__group {
-		margin: 20px 0;
+		margin: 25px 0;
 		position: relative;
 		width: 100%;
 		&_btn {
 			margin-bottom: 0;
 		}
 	}
+	&__label {
+		font-size: 1.35rem;
+	}
+	&__item {
+    position: relative;
+    &--btn {
+      padding: 0;
+    }
+    & > .label {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #8f8f8f;
+      font-size: 1.5rem;
+    }
+    & > .control {
+      border: 1px solid #e8e8e8;
+      -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
+      box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
+      line-height: 30px;
+      height: 30px;
+      background: #fff;
+      font-size: 1.5rem;
+      color: rgb(20, 55, 90);
+      // color: #555e6c;
+      outline: none;
+      padding: 5px 8px;
+      width: 100%;
+      &:focus + label {
+        display: none;
+      }
+    }
+  }
 	&__control {
 		border: 1px solid #dedede;
 		color: #232323;
@@ -169,10 +225,23 @@ a:hover {
 		&_txt {
 			min-height: 80px;
 		}
+		&_checkbox, &_radio {
+			margin: 0 6px 0 0;
+			padding: 0;
+			width: auto;
+		}
 		&:focus {
 			border-color: rgba(5, 69, 153, .3);
 			color: #054599;
 		}
+	}
+}
+
+.btn {
+  font-size: 1.5rem;
+  padding: 3px 6px;
+	&:hover {
+		cursor: pointer;
 	}
 }
 </style>

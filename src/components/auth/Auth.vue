@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="form__item form__item--btn">
-                <button class="btn" type="submit" v-bind:disabled="!isValid">
+                <button class="btn" type="submit" v-bind:disabled="!isValidForm">
                     <span>Войти</span>
                 </button>
             </div>
@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     // валидация формы
-    isValid: function () {
+    isValidForm: function () {
       return (this.login !== '') && (this.pswd !== '')
     }
   }
@@ -76,82 +76,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.code {
-  width: 600px;
-  margin: 0 auto;
-}
-
 .b-auth {
   position: relative;
   width: 100%;
 }
 
-.form {
-  position: relative;
-  width: 100%;
-  &-wrapper {
-    position: relative;
-    margin: 5rem auto;
-    padding: 3rem;
-    width: 100%;
-    min-width: 300px;
-    max-width: 400px;
-  }
-  &__title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    & > h1 {
-      display: inline-block;
-      font-size: 100%;
-      margin: 0;
-    }
-    & > a {
-      float: right;
-      font-size: 1.27rem;
-      line-height: 1;
-    }
-  }
-  &__group {
-    position: relative;
-    padding: 15px 0;
-  }
-  &__item {
-    position: relative;
-    padding: 15px 0;
-    &--btn {
-      padding: 0;
-    }
-    & > .label {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      color: #8f8f8f;
-      font-size: 1.5rem;
-    }
-    & > .control {
-      border: 1px solid #e8e8e8;
-      -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
-      box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
-      line-height: 30px;
-      height: 30px;
-      background: #fff;
-      font-size: 1.5rem;
-      color: rgb(20, 55, 90);
-      // color: #555e6c;
-      outline: none;
-      padding: 5px 8px;
-      width: 100%;
-      &:focus + label {
-        display: none;
-      }
-    }
-  }
-}
-
-.btn {
-  cursor: pointer;
-  font-size: 1.5rem;
-  padding: 3px 6px;
+.form__item {
+  margin: 25px 0;
 }
 </style>

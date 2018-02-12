@@ -33,16 +33,8 @@ export default {
           href: '/orders'
         },
         {
-          title: 'Blog',
+          title: 'Статьи',
           href: '/blog'
-        },
-        {
-          title: 'Lash & Brow menu',
-          href: '/orders'
-        },
-        {
-          title: 'Materials',
-          href: '/orders'
         }
       ]
     }
