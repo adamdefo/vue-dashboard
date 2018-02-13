@@ -1,0 +1,53 @@
+<div class="blog">
+	<div class="title">
+		<h1>{{ title }}</h1>
+		<div class="title__links">
+			<button @click="showAddArticleForm">Добавить</button>
+		</div>
+	</div>
+	<div class="blog__article-list">
+		<ul>
+			<li v-for="article in articles">
+				<a href="#">{{ article.title }}</a>
+			</li>
+		</ul>
+	</div>
+	<div v-if="isShowArticleForm" class="blog__form">
+		<form class="form" @submit.prevent="saveArticle" enctype="multipart/form-data">
+			<div class="form__group">
+				<div class="form__group-item">
+					<label class="form__label">Заголовок</label>
+					<input class="form__control" type="text" v-model="article.title" />
+				</div>
+			</div>
+			<div class="form__group">
+				<div class="form__group-item">
+					<label class="form__label">Краткое описание</label>
+					<input class="form__control" type="text" v-model="article.meta.description" />
+				</div>
+			</div>
+			<div class="form__group">
+				<div class="form__group-item">
+					<label class="form__label">Ключевые слова</label>
+					<input class="form__control" type="text" v-model="article.meta.keywords" />
+				</div>
+			</div>
+			<div class="form__group">
+				<div class="form__group-item">
+					<label class="form__label">Содержание</label>
+					<textarea class="form__control form__control_txt" type="text" v-model="article.content"></textarea>
+				</div>
+			</div>
+			<div class="form__group">
+				<div class="form__group-item">
+					<label class="form__label">
+						<input class="form__control form__control_checkbox" type="checkbox" v-model="article.isDraft" /><span>черновик</span>
+					</label>
+				</div>
+			</div>
+			<div class="form__group form__group_btn">
+					<button class="btn" type="submit">Сохранить</button>
+			</div>
+		</form>
+	</div>
+</div>
