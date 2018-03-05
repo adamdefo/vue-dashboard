@@ -184,43 +184,17 @@ a:hover {
 	&__label {
 		font-size: 1.35rem;
 	}
-	&__item {
-    position: relative;
-    &--btn {
-      padding: 0;
-    }
-    & > .label {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      color: #8f8f8f;
-      font-size: 1.5rem;
-    }
-    & > .control {
-      border: 1px solid #e8e8e8;
-      -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
-      box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
-      line-height: 30px;
-      height: 30px;
-      background: #fff;
-      font-size: 1.5rem;
-      color: rgb(20, 55, 90);
-      // color: #555e6c;
-      outline: none;
-      padding: 5px 8px;
-      width: 100%;
-      &:focus + label {
-        display: none;
-      }
-    }
-  }
-	&__control {
-		border: 1px solid #dedede;
-		color: #232323;
-		font-size: 1em;
+	&__input {
+		border: 1px solid #e8e8e8;
+		-webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
+		box-shadow: inset 1px 1px 0 rgba(0,0,0,.3);
+		line-height: 30px;
+		height: 30px;
+		background: #fff;
+		font-size: 1.5rem;
+		color: rgb(20, 55, 90);
 		outline: none;
-		padding: 8px 10px;
+		padding: 5px 8px;
 		width: 100%;
 		&_txt {
 			min-height: 80px;

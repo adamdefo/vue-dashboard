@@ -1,56 +1,64 @@
 <template>
 <div class="blog">
-	<div class="title">
-		<h1>{{ title }}</h1>
-		<div class="title__links">
-			<button @click="showAddArticleForm">Добавить</button>
-		</div>
-	</div>
-	<div class="blog__article-list">
-		<ul>
-			<li v-for="article in articles">
-				<a @click.prevent="getArticle(article)">{{ article.title }}</a>
-			</li>
-		</ul>
-	</div>
-	<div v-if="isShowArticleForm" class="blog__form">
-		<form class="form" @submit.prevent="saveArticle" enctype="multipart/form-data">
-			<div class="form__group">
-				<div class="form__group-item">
-					<label class="form__label">Заголовок</label>
-					<input class="form__control" type="text" v-model="article.title" />
-				</div>
-			</div>
-			<div class="form__group">
-				<div class="form__group-item">
-					<label class="form__label">Краткое описание</label>
-					<input class="form__control" type="text" v-model="article.meta.description" />
-				</div>
-			</div>
-			<div class="form__group">
-				<div class="form__group-item">
-					<label class="form__label">Ключевые слова</label>
-					<input class="form__control" type="text" v-model="article.meta.keywords" />
-				</div>
-			</div>
-			<div class="form__group">
-				<div class="form__group-item">
-					<label class="form__label">Содержание</label>
-					<textarea class="form__control form__control_txt" type="text" v-model="article.content"></textarea>
-				</div>
-			</div>
-			<div class="form__group">
-				<div class="form__group-item">
-					<label class="form__label">
-						<input class="form__control form__control_checkbox" type="checkbox" v-model="article.isDraft" /><span>черновик</span>
-					</label>
-				</div>
-			</div>
-			<div class="form__group form__group_btn">
-				<button class="btn" type="submit">Сохранить</button>
-			</div>
-		</form>
-	</div>
+  <div class="title">
+    <h1>{{ title }}</h1>
+    <div class="title__links">
+      <button @click="showAddArticleForm">
+        <span>{{ btnAdd.txt }}</span>
+      </button>
+    </div>
+  </div>
+  <div class="blog__article-list">
+    <ul>
+      <li v-for="article in articles">
+        <img :src="article.cover" />
+        <a @click.prevent="getArticle(article)">{{ article.title }}</a>
+      </li>
+    </ul>
+  </div>
+  <div v-if="isShowArticleForm" class="blog__form">
+    <form class="form" method="post" @submit.prevent="saveArticle" enctype="multipart/form-data">
+      <div class="dropbox">
+        <div class="dropbox__image"><img :src="article.cover" /></div>
+        <input class="dropbox__input" type="file" name="fileUploader" accept="image/*" multiple @change="changeUploader" />
+      </div>
+      <div class="form__title">Новая статья</div>
+      <div class="form__group">
+        <div class="form__group-item">
+          <label class="form__label">Заголовок</label>
+          <input class="form__input" type="text" v-model="article.title" />
+        </div>
+      </div>
+      <div class="form__group">
+        <div class="form__group-item">
+          <label class="form__label">Краткое описание</label>
+          <input class="form__input" type="text" v-model="article.meta.description" />
+        </div>
+      </div>
+      <div class="form__group">
+        <div class="form__group-item">
+          <label class="form__label">Ключевые слова</label>
+          <input class="form__input" type="text" v-model="article.meta.keywords" />
+        </div>
+      </div>
+      <div class="form__group">
+        <div class="form__group-item">
+          <label class="form__label">Содержание</label>
+          <textarea class="form__input form__input_txt" type="text" v-model="article.content"></textarea>
+        </div>
+      </div>
+      <div class="form__group">
+        <div class="form__group-item">
+          <label class="form__label">
+            <input class="form__checkbox" type="checkbox" v-model="article.isDraft" /><span>черновик</span>
+          </label>
+        </div>
+      </div>
+      <div class="form__group form__group_btn">
+        <button class="btn" type="submit">Сохранить</button>
+      </div>
+    </form>
+  </div>
 </div>
 </template>
 
@@ -60,13 +68,17 @@ export default {
   data: function () {
     return {
       api: '../api/',
-      url: 'https://jsonplaceholder.typicode.com',
       title: 'Статьи',
       loading: false,
+      btnAdd: {
+        txt: 'Открыть форму'
+      },
       articles: [],
-      articleImage: '', // обложка для статьи
+      image: '', // обложка для статьи
+      uploadFiles: [],
       article: {
-        title: '',
+        cover: '',
+        title: 'Новая статья',
         meta: {
           description: '',
           keywords: ''
@@ -74,6 +86,7 @@ export default {
         content: '',
         isDraft: true
       },
+      form: new FormData(),
       isShowArticleForm: false,
       blogList: [] // список статей
     }
@@ -96,9 +109,12 @@ export default {
       this.isShowArticleForm = true
     },
     saveArticle: function () {
-      this.loading = false
-      let params = Object.assign({}, this.article)
-      this.$http.post(this.api, params).then(function (response) {
+      // this.loading = false
+      // let params = Object.assign({}, this.article)
+      let formData = new FormData()
+      formData.append('file', this.uploadFiles[0])
+      // console.log(formData)
+      this.$http.post(this.api + 'upload.service.php', formData).then(function (response) {
         console.log(response)
         this.loading = true
       }, function (error) {
@@ -111,27 +127,28 @@ export default {
     },
     showAddArticleForm: function () {
       this.isShowArticleForm = !this.isShowArticleForm
+      this.btnAdd.txt = this.isShowArticleForm ? 'Закрыть форму' : 'Открыть форму'
     },
-    onFileChange: function (e) {
-      var files = e.target.files || e.dataTransfer.files
-      if (!files.length) {
+    // реагирует на изменение загрузчика
+    changeUploader: function (e) {
+      this.uploadFiles = e.target.files || e.dataTransfer.files
+      if (!this.uploadFiles.length) {
         return
       }
-      this.createImage(files[0])
+      this.createImage(this.uploadFiles[0])
     },
+    // создает миниатюру загруженной обложки
     createImage: function (file) {
-      var image = new Image()
-      console.log(image)
-      var reader = new FileReader()
       var vm = this
-
-      reader.onload = (e) => {
-        vm.articleImage = e.target.result
+      var fr = new FileReader()
+      fr.onload = (e) => {
+        vm.article.cover = e.target.result
       }
-      reader.readAsDataURL(file)
+      fr.readAsDataURL(file)
     },
-    removeImage: function (e) {
-      this.articleImage = ''
+    // очищает загрузчик
+    clearUploader: function (e) {
+      this.article.cover = ''
     }
   },
   created: function () {
@@ -147,40 +164,51 @@ export default {
 
 <style lang="scss" scoped>
 .blog {
-	&__article-list {
-		// border-left: 1px solid #dedede; 
-		& ul {
-			margin-left: 16px;
-		}
-	}
+  &__article-list {
+    // border-left: 1px solid #dedede; 
+    & ul {
+      margin-left: 16px;
+    }
+  }
 }
 
 .title {
-	padding: 2.5rem 0 1.5rem;
-	& > h1 {
-		border-bottom: 1px solid #dedede;
-		margin: 0 0 1.5rem;
-	}
-	&__links {
-		font-size: 1.3rem;
-		& > a {
-			margin-right: 1rem;
-		}
-	}
+  padding: 2.5rem 0 1.5rem;
+  & > h1 {
+    border-bottom: 1px solid #dedede;
+    margin: 0 0 1.5rem;
+  }
+  &__links {
+    font-size: 1.3rem;
+    & > a {
+      margin-right: 1rem;
+    }
+  }
 }
 
 .list {
-	& > li {
-		font-size: 1.5rem;
-		margin: 1.5rem 0;
-	}
-	& b {
-		font-weight: bold;
-	}
+  & > li {
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  & b {
+    font-weight: bold;
+  }
 }
 
 .loading {
-	text-align: center;
-	font-size: 1.3rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.dropbox {
+  position: relative;
+  &__image {
+    & img {
+      display: inline-block;
+      width: 30%;
+      height: auto;
+    }
+  }
 }
 </style>
