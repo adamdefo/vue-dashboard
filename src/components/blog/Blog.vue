@@ -3,54 +3,54 @@
   <div class="title">
     <h1>{{ title }}</h1>
     <div class="title__links">
-      <button @click="showAddArticleForm">
+      <button @click="showForm">
         <span>{{ btnAdd.txt }}</span>
       </button>
     </div>
   </div>
   <div class="blog__article-list">
     <ul>
-      <li v-for="article in articles">
+      <li v-for="kinotekaItem in kinoteka">
         <img :src="article.cover" />
-        <a @click.prevent="getArticle(article)">{{ article.title }}</a>
+        <a @click.prevent="getArticle(kinotekaItem)">{{ kinotekaItem.title }}</a>
       </li>
     </ul>
   </div>
-  <div v-if="isShowArticleForm" class="blog__form">
+  <div v-if="isShowForm" class="blog__form">
     <form class="form" method="post" @submit.prevent="saveArticle" enctype="multipart/form-data">
       <div class="dropbox">
-        <div class="dropbox__image"><img :src="article.cover" /></div>
-        <input class="dropbox__input" type="file" name="fileUploader" accept="image/*" multiple @change="changeUploader" />
+        <div class="dropbox__image"><img :src="cover" /></div>
+        <input class="dropbox__input" type="file" name="uploader" accept="image/*" multiple @change="changeUploader" />
       </div>
-      <div class="form__title">Новая статья</div>
+      <div class="form__title">{{ kinotekaItem.title }}</div>
       <div class="form__group">
         <div class="form__group-item">
           <label class="form__label">Заголовок</label>
-          <input class="form__input" type="text" v-model="article.title" />
+          <input class="form__input" type="text" v-model="kinotekaItem.title" />
         </div>
       </div>
       <div class="form__group">
         <div class="form__group-item">
           <label class="form__label">Краткое описание</label>
-          <input class="form__input" type="text" v-model="article.meta.description" />
+          <input class="form__input" type="text" v-model="kinotekaItem.meta.description" />
         </div>
       </div>
       <div class="form__group">
         <div class="form__group-item">
           <label class="form__label">Ключевые слова</label>
-          <input class="form__input" type="text" v-model="article.meta.keywords" />
+          <input class="form__input" type="text" v-model="kinotekaItem.meta.keywords" />
         </div>
       </div>
       <div class="form__group">
         <div class="form__group-item">
           <label class="form__label">Содержание</label>
-          <textarea class="form__input form__input_txt" type="text" v-model="article.content"></textarea>
+          <textarea class="form__input form__input_txt" type="text" v-model="kinotekaItem.content"></textarea>
         </div>
       </div>
       <div class="form__group">
         <div class="form__group-item">
           <label class="form__label">
-            <input class="form__checkbox" type="checkbox" v-model="article.isDraft" /><span>черновик</span>
+            <input class="form__checkbox" type="checkbox" v-model="kinotekaItem.isDraft" /><span>черновик</span>
           </label>
         </div>
       </div>
@@ -64,7 +64,7 @@
 
 <script>
 export default {
-  name: 'Blog',
+  name: 'Kinoteka',
   data: function () {
     return {
       api: '../api/',
@@ -73,10 +73,10 @@ export default {
       btnAdd: {
         txt: 'Открыть форму'
       },
-      articles: [],
-      image: '', // обложка для статьи
       uploadFiles: [],
-      article: {
+      cover: '',
+      kinoteka: [],
+      kinotekaItem: {
         cover: '',
         title: 'Новая статья',
         meta: {
@@ -86,8 +86,7 @@ export default {
         content: '',
         isDraft: true
       },
-      form: new FormData(),
-      isShowArticleForm: false,
+      isShowForm: false,
       blogList: [] // список статей
     }
   },
@@ -106,14 +105,14 @@ export default {
     },
     getArticle: function (article) {
       console.log(article)
-      this.isShowArticleForm = true
+      this.isShowForm = true
     },
     saveArticle: function () {
       // this.loading = false
       // let params = Object.assign({}, this.article)
       let formData = new FormData()
+      formData.append('data', this.uploadFiles[0])
       formData.append('file', this.uploadFiles[0])
-      // console.log(formData)
       this.$http.post(this.api + 'upload.service.php', formData).then(function (response) {
         console.log(response)
         this.loading = true
@@ -122,12 +121,12 @@ export default {
         this.loading = true
       })
     },
-    onCloseArticleForm: function () {
-      this.isShowArticleForm = false
+    closeForm: function () {
+      this.isShowForm = false
     },
-    showAddArticleForm: function () {
-      this.isShowArticleForm = !this.isShowArticleForm
-      this.btnAdd.txt = this.isShowArticleForm ? 'Закрыть форму' : 'Открыть форму'
+    showForm: function () {
+      this.isShowForm = !this.isShowForm
+      this.btnAdd.txt = this.isShowForm ? 'Закрыть форму' : 'Открыть форму'
     },
     // реагирует на изменение загрузчика
     changeUploader: function (e) {
@@ -142,13 +141,13 @@ export default {
       var vm = this
       var fr = new FileReader()
       fr.onload = (e) => {
-        vm.article.cover = e.target.result
+        vm.cover = e.target.result
       }
       fr.readAsDataURL(file)
     },
     // очищает загрузчик
     clearUploader: function (e) {
-      this.article.cover = ''
+      this.cover = ''
     }
   },
   created: function () {

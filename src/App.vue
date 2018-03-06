@@ -13,9 +13,6 @@
       <main class="main">
         <router-view></router-view>
       </main>
-      <footer class="footer">
-        <div class="container"></div>
-      </footer>
     </div>
   </div>
 </template>

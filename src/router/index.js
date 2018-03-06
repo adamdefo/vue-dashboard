@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Auth from '@/components/auth/Auth'
 // import Hello from '@/components/Hello'
 import Orders from '@/components/orders/Orders'
-import Blog from '@/components/blog/Blog'
+import Kinoteka from '@/components/blog/Blog'
 
 Vue.use(Router)
 
@@ -16,8 +16,8 @@ export default new Router({
     },
     {
       path: '/blog',
-      name: 'Blog',
-      component: Blog
+      name: 'Kinoteka',
+      component: Kinoteka
     },
     {
       path: '/orders',
