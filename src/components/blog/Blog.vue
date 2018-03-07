@@ -11,7 +11,7 @@
   <div class="blog__article-list">
     <ul>
       <li v-for="kinotekaItem in kinoteka">
-        <img :src="article.cover" />
+        <img :src="kinotekaItem.cover" />
         <a @click.prevent="getArticle(kinotekaItem)">{{ kinotekaItem.title }}</a>
       </li>
     </ul>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { makeRequest } from './utils';
 export default {
   name: 'Kinoteka',
   data: function () {
@@ -95,8 +96,8 @@ export default {
       let vm = this
       this.$http.get(this.api).then(function (response) {
         console.log(response)
-        let articles = response.data
-        vm.articles = articles.list.slice()
+        let kinoteka = response.data
+        vm.kinoteka = kinoteka.list.slice()
         this.loading = true
       }, function (error) {
         console.log(error)
@@ -108,18 +109,21 @@ export default {
       this.isShowForm = true
     },
     saveArticle: function () {
-      // this.loading = false
-      // let params = Object.assign({}, this.article)
-      let formData = new FormData()
-      formData.append('data', this.uploadFiles[0])
-      formData.append('file', this.uploadFiles[0])
-      this.$http.post(this.api + 'upload.service.php', formData).then(function (response) {
-        console.log(response)
-        this.loading = true
-      }, function (error) {
-        console.log(error)
-        this.loading = true
-      })
+      this.loading = false
+
+      let params = Object.assign({}. this.kinotekaItem)
+      this.$http.post(this.api, params).then(
+        response => {
+          console.log(response)
+          this.loading = true
+          let formData = new FormData()
+          formData.append('file', this.uploadFiles[0])
+          this.$http.post(this.api + 'upload.service.php', formData)
+        }, error => {
+          console.log(error)
+          this.loading = true
+        }
+      )
     },
     closeForm: function () {
       this.isShowForm = false
