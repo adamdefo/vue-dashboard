@@ -139,7 +139,7 @@ a:hover {
 }
 
 .layout {
-	padding: 60px;
+	padding: 30px;
 }
 
 .form {

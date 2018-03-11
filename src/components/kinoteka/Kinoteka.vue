@@ -53,7 +53,6 @@ export default {
       btnAdd: {
         txt: 'Открыть форму'
       },
-      action: '',
       uploadFiles: [],
       cover: '',
       kinoteka: [],
@@ -62,17 +61,15 @@ export default {
         name: 'Новый фильм',
         content: ''
       },
-      isShowForm: false,
-      blogList: [] // список статей
+      isShowForm: false
     }
   },
   methods: {
     getFilms: function () {
       let vm = this
       this.$http.get(this.api).then(function (response) {
-        console.log(response)
-        let kinoteka = response.data
-        vm.kinoteka = kinoteka.list.slice()
+        let data = response.data
+        vm.kinoteka = data.list.slice()
         this.loading = true
       }, function (error) {
         console.log(error)
@@ -80,25 +77,42 @@ export default {
       })
     },
     getFilm: function (film) {
-      Object.assign(this.kinotekaItem, film)
+      let selectedFilm = this.kinoteka.filter(function(item) {
+        return item.id.toString() === film.id;
+      });
+      console.log(selectedFilm)
+      this.kinotekaItem = Object.assign({}, selectedFilm)
       this.isShowForm = true
+    },
+    findFilmById: function (filmId) {
+      let vm = this
+      this.kinoteka.some( item => {
+        if (item.id.toString() === filmId) {
+          vm.kinotekaItem = item
+        }
+      })
     },
     save: function () {
       let vm = this
       this.loading = false
-      this.$http.post(this.api, this.kinotekaItem).then(response => {
-        console.log(response)
-        alert(response.data.message)
+      let params = {
+        action: !vm.kinotekaItem.id ? 'create' : 'update'
+      }
+      this.$http.post(this.api, Object.assign(this.kinotekaItem, params)).then(response => {
         vm.loading = true
         let data = response.data
-        vm.kinotekaItem.id = data.lastInsertIndex
-        vm.kinoteka.push(vm.kinotekaItem)
-        let formData = new FormData()
-        formData.append('file', vm.uploadFiles[0])
-        formData.append('filmId', data.lastInsertIndex)
-        vm.$http.post(vm.api + 'upload.service.php', formData).then(upload => {
-          console.log(upload)
-        })
+        console.log(data.message)
+        // если нет id значит новый фильм
+        if (!vm.kinotekaItem.id) {
+          vm.kinotekaItem.id = data.filmId
+          vm.kinoteka.push(vm.kinotekaItem)
+          let formData = new FormData()
+          formData.append('file', vm.uploadFiles[0])
+          formData.append('filmId', data.filmId)
+          vm.$http.post(vm.api + 'upload.service.php', formData).then(upload => {
+            console.log(upload)
+          })
+        }
       }, error => {
         console.log(error)
         vm.loading = true
@@ -160,6 +174,7 @@ export default {
   display: table;
   padding: 2.5rem 0 1.5rem;
   border-bottom: 1px solid #dedede;
+  margin-bottom: 1.5rem;
   width: 100%;
   & > h1 {
     display: table-cell;
