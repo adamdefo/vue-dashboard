@@ -1,11 +1,11 @@
 <template>
   <header class="header">
-    <!-- <div class="header__logo">
+    <!--<div class="header__logo">
       <a href="#/">
-        <span class="logo">DOGMA</span>
+        <span class="logo">Система управления</span>
         <span class="slogan">Ресницы & Брови</span>
       </a>
-    </div> -->
+    </div>-->
     <div class="header__nav">
       <nav class="nav">
         <ul>
@@ -25,16 +25,12 @@ export default {
     return {
       navLinks: [
         {
-          title: 'Home',
+          title: 'Главная',
           href: '/'
         },
         {
-          title: 'About',
-          href: '/orders'
-        },
-        {
-          title: 'Статьи',
-          href: '/blog'
+          title: 'Кинотека',
+          href: '/kinoteka'
         }
       ]
     }
@@ -45,8 +41,6 @@ export default {
 <style lang="scss" scoped>
 .logo {
   display: block;
-  font-family: Georgia, 'Times New Roman', Times, serif;
-  // font-style: italic;
   font-size: 3.5em;
   font-weight: 600;
   margin-bottom: 20px; 

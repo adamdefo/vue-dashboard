@@ -10,9 +10,11 @@
   </div>
   <div class="blog__article-list">
     <ul>
-      <li v-for="kinotekaItem in kinoteka">
-        <img :src="kinotekaItem.cover" />
-        <a @click.prevent="getArticle(kinotekaItem)">{{ kinotekaItem.title }}</a>
+      <li v-for="item in kinoteka">
+        <a @click.prevent="getArticle(item)">
+          <img :src="item.cover" />
+          <span>{{ item.title }}</span>
+        </a>
       </li>
     </ul>
   </div>
@@ -63,17 +65,17 @@
 </template>
 
 <script>
-import { makeRequest } from './utils';
 export default {
-  name: 'Kinoteka',
+  name: 'Lessons',
   data: function () {
     return {
       api: '../api/',
-      title: 'Статьи',
+      title: 'Уроки',
       loading: false,
       btnAdd: {
         txt: 'Открыть форму'
       },
+      action: '',
       uploadFiles: [],
       cover: '',
       kinoteka: [],
@@ -109,21 +111,21 @@ export default {
       this.isShowForm = true
     },
     saveArticle: function () {
+      let vm = this
       this.loading = false
 
-      let params = Object.assign({}. this.kinotekaItem)
-      this.$http.post(this.api, params).then(
-        response => {
-          console.log(response)
-          this.loading = true
-          let formData = new FormData()
-          formData.append('file', this.uploadFiles[0])
-          this.$http.post(this.api + 'upload.service.php', formData)
-        }, error => {
-          console.log(error)
-          this.loading = true
-        }
-      )
+      this.$http.post(this.api, this.kinotekaItem).then(response => {
+        console.log(response)
+        vm.loading = true
+        let formData = new FormData()
+        formData.append('file', vm.uploadFiles[0])
+        vm.$http.post(vm.api + 'upload.service.php', formData).then(upload => {
+          console.log(upload)
+        })
+      }, error => {
+        console.log(error)
+        vm.loading = true
+      })
     },
     closeForm: function () {
       this.isShowForm = false
@@ -142,8 +144,8 @@ export default {
     },
     // создает миниатюру загруженной обложки
     createImage: function (file) {
-      var vm = this
-      var fr = new FileReader()
+      let vm = this
+      let fr = new FileReader()
       fr.onload = (e) => {
         vm.cover = e.target.result
       }

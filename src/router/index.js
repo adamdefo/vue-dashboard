@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Auth from '@/components/auth/Auth'
 // import Hello from '@/components/Hello'
-import Orders from '@/components/orders/Orders'
-import Kinoteka from '@/components/blog/Blog'
+import Lessons from '@/components/lessons/Lessons'
+import Kinoteka from '@/components/kinoteka/Kinoteka'
 
 Vue.use(Router)
 
@@ -15,14 +15,14 @@ export default new Router({
       component: Auth
     },
     {
-      path: '/blog',
-      name: 'Kinoteka',
-      component: Kinoteka
+      path: '/lessons',
+      name: 'Lessons',
+      component: Lessons
     },
     {
-      path: '/orders',
-      name: 'Orders',
-      component: Orders
+      path: '/kinoteka',
+      name: 'Kinoteka',
+      component: Kinoteka
     }
   ]
 })
