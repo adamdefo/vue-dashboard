@@ -51,7 +51,7 @@ export default {
       title: 'Кинотека',
       loading: false,
       btnAdd: {
-        txt: 'Открыть форму'
+        txt: 'Добавить фильм'
       },
       uploadFiles: [],
       cover: '',
@@ -77,18 +77,14 @@ export default {
       })
     },
     getFilm: function (film) {
-      let selectedFilm = this.kinoteka.filter(function(item) {
-        return item.id.toString() === film.id;
-      });
-      console.log(selectedFilm)
-      this.kinotekaItem = Object.assign({}, selectedFilm)
+      this.kinotekaItem = Object.assign({}, film)
       this.isShowForm = true
     },
     findFilmById: function (filmId) {
       let vm = this
-      this.kinoteka.some( item => {
+      this.kinoteka.some(item => {
         if (item.id.toString() === filmId) {
-          vm.kinotekaItem = item
+          Object.assign(item, vm.kinotekaItem)
         }
       })
     },
@@ -98,10 +94,12 @@ export default {
       let params = {
         action: !vm.kinotekaItem.id ? 'create' : 'update'
       }
+
       this.$http.post(this.api, Object.assign(this.kinotekaItem, params)).then(response => {
         vm.loading = true
         let data = response.data
         console.log(data.message)
+        this.findFilmById(this.kinotekaItem.id) // обновляю инфо у фильма
         // если нет id значит новый фильм
         if (!vm.kinotekaItem.id) {
           vm.kinotekaItem.id = data.filmId
@@ -123,7 +121,7 @@ export default {
     },
     showForm: function () {
       this.isShowForm = !this.isShowForm
-      this.btnAdd.txt = this.isShowForm ? 'Закрыть форму' : 'Открыть форму'
+      this.btnAdd.txt = this.isShowForm ? 'Закрыть форму' : 'Добавить фильм'
     },
     // реагирует на изменение загрузчика
     changeUploader: function (e) {
