@@ -6,6 +6,9 @@
       <button @click="showForm">
         <span>{{ btnAdd.txt }}</span>
       </button>
+      <button @click="addNewFilm">
+        <span>Добавить фильм</span>
+      </button>
     </div>
   </div>
   <div class="blog__article-list">
@@ -26,6 +29,12 @@
         <div class="form__group-item">
           <label class="form__label">Название</label>
           <input class="form__input" type="text" v-model="kinotekaItem.name" />
+        </div>
+      </div>
+      <div class="form__group">
+        <div class="form__group-item">
+          <label class="form__label">Год выпуска</label>
+          <input class="form__input" type="text" v-model="kinotekaItem.year" />
         </div>
       </div>
       <div class="form__group">
@@ -51,14 +60,15 @@ export default {
       title: 'Кинотека',
       loading: false,
       btnAdd: {
-        txt: 'Добавить фильм'
+        txt: 'Открыть форму'
       },
       uploadFiles: [],
       cover: '',
       kinoteka: [],
       kinotekaItem: {
         id: null,
-        name: 'Новый фильм',
+        name: '',
+        year: null,
         content: ''
       },
       isShowForm: false
@@ -103,7 +113,7 @@ export default {
         // если нет id значит новый фильм
         if (!vm.kinotekaItem.id) {
           vm.kinotekaItem.id = data.filmId
-          vm.kinoteka.push(vm.kinotekaItem)
+          vm.kinoteka.unshift(vm.kinotekaItem)
           let formData = new FormData()
           formData.append('file', vm.uploadFiles[0])
           formData.append('filmId', data.filmId)
@@ -116,12 +126,23 @@ export default {
         vm.loading = true
       })
     },
+    addNewFilm: function () {
+      this.isShowForm = true
+      this.kinotekaItem = {
+        id: null,
+        name: '',
+        year: null,
+        content: ''
+      }
+      this.cover = ''
+      this.uploadFiles = []
+    },
     closeForm: function () {
       this.isShowForm = false
     },
     showForm: function () {
       this.isShowForm = !this.isShowForm
-      this.btnAdd.txt = this.isShowForm ? 'Закрыть форму' : 'Добавить фильм'
+      this.btnAdd.txt = this.isShowForm ? 'Закрыть форму' : 'Открыть форму'
     },
     // реагирует на изменение загрузчика
     changeUploader: function (e) {
