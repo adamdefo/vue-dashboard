@@ -36,11 +36,16 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      // 'modernizr$': path.resolve(__dirname, '/path/to/.modernizrrc.js')
     }
   },
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
+      // {
+      //   loader: 'webpack-modernizr-loader',
+      //   test: /\.modernizrrc\.js$/
+      // },
       {
         test: /\.scss$/,
         loaders: ['style','css', 'sass']
