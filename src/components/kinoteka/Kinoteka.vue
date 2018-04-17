@@ -1,7 +1,7 @@
 <template src="./Kinoteka.tmpl.html"></template>
 
 <script>
-import Notification from './../../notification'
+import Notification from './../core/notification'
 
 export default {
   name: 'Kinoteka',
@@ -22,7 +22,8 @@ export default {
         year: null,
         content: ''
       },
-      isShowForm: false
+      isShowForm: false,
+      notification: null
     }
   },
   methods: {
@@ -91,16 +92,22 @@ export default {
     closeForm: function () {
       this.isShowForm = false
 
-      let notification = new Notification({
-        message: '<p>This is just a simple notice. Everything is in order and this is a <a href="#">simple link</a>.</p>',
+      let message = '<p>Форма закрыта</p>'
+      this.createNotification(message)
+    },
+    // пересоздает и выводит уведомление
+    /**
+     * @message текст уведления
+     * @type тип (notice, warning, error or success)
+     */
+    createNotification (message, type = 'notice') {
+      this.notification = new Notification({
+        message: message,
         layout: 'growl',
         effect: 'scale',
-        type: 'notice', // notice, warning, error or success
-        onClose: () => {
-          console.log('AAAAAAAAAAA')
-        }
+        type: type // notice, warning, error or success
       })
-      notification.show()
+      this.notification.show()
     },
     // реагирует на изменение загрузчика
     changeUploader: function (e) {

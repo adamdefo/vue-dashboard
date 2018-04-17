@@ -10,19 +10,8 @@
 
 import classie from './classie'
 
-// let support = { animations: modernizr.cssanimations }
-// let animEndEventNames = {
-//   'WebkitAnimation': 'webkitAnimationEnd',
-//   'OAnimation': 'oAnimationEnd',
-//   'msAnimation': 'MSAnimationEnd',
-//   'animation': 'animationend'
-// }
-  // animation end event name
-// let animEndEventName = animEndEventNames[modernizr.prefixed('animation')]
-
 class Notification {
   constructor (options) {
-    this.isSupport = true
     this.active = false
     this.ntf = null // блок уведомления
     this.dismissttl = null
@@ -48,7 +37,7 @@ class Notification {
       type: 'error',
       // if the user doesn´t close the notification then we remove it
       // after the following time
-      ttl: 5500,
+      ttl: 1500,
       // callbacks
       onClose: function () { return false },
       onOpen: function () { return false }
@@ -69,7 +58,7 @@ class Notification {
     // append to body or the element specified in options.wrapper
     this.options.wrapper.insertBefore(this.ntf, this.options.wrapper.firstChild)
 
-    // dismiss after [options.ttl]ms
+    // создается таймер закрытия уведомления
     this.dismissttl = setTimeout(() => {
       if (self.active) {
         self.close()
@@ -101,29 +90,29 @@ class Notification {
    */
   close () {
     let self = this
+
     this.active = false
     clearTimeout(this.dismissttl)
     classie.remove(this.ntf, 'ns-show')
-    setTimeout(() => {
-      classie.add(self.ntf, 'ns-hide')
-      // callback
-      onEndAnimationFn()
-      self.options.onClose()
-    }, 25)
 
-    let onEndAnimationFn = (ev) => {
-      // if (support.animations) {
-      //   if (ev.target !== self.ntf) return false
-      //   this.removeEventListener(animEndEventName, onEndAnimationFn)
-      // }
-      self.options.wrapper.removeChild(self.ntf)
-    }
+    // ожидание на выполнение анимации закрытия уведомления
+    let onEndAnimation = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        classie.add(self.ntf, 'ns-hide')
+        self.options.onClose()
+        resolve()
+      }, 0)
+    })
 
-    // if (support.animations) {
-    //   this.ntf.addEventListener(animEndEventName, onEndAnimationFn)
-    // } else {
-    //   onEndAnimationFn()
-    // }
+    onEndAnimation
+      .then(
+        result => {
+          setTimeout(() => {
+            console.log('удалить уведомлялку')
+            self.options.wrapper.removeChild(self.ntf)
+          }, 250)
+        }
+      )
   }
 }
 
