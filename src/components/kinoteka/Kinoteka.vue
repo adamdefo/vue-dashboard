@@ -92,7 +92,7 @@ export default {
       this.isShowForm = false
 
       let notification = new Notification({
-        message: '<p>This is just a simple notice. Everything is in order and this is a <a href="#">simple link</a>.</p>',
+        message: '<p>Привет)</p>',
         layout: 'growl',
         effect: 'scale',
         type: 'notice', // notice, warning, error or success

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="layout">
     <div id="note-main" class="note note--show" v-if="showNote">
       <div class="note__content">
         <div class="note__txt">
@@ -8,20 +8,18 @@
         </div>
       </div>
     </div>
-    <div class="layout">
-      <header class="header">
-        <div class="header__container">
-          <div class="header__logo"><a :to="rootLink.href" :title="rootLink.title" class="logo"><span>admin</span></a>
-          </div>
-          <div class="header__nav">
-            <navigation></navigation>
-          </div>
+    <header class="header">
+      <div class="header__container">
+        <div class="header__logo"><a :to="rootLink.href" :title="rootLink.title" class="logo"><span>admin</span></a>
         </div>
-      </header>
-      <main class="main">
-        <router-view></router-view>
-      </main>
-    </div>
+        <div class="header__nav">
+          <navigation></navigation>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <router-view></router-view>
+    </main>
   </div>
 </template>
 

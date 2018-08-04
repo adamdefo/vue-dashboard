@@ -1,13 +1,25 @@
-.blog
+.kinoteka
 	position: relative
 	padding: 0 3rem
-	&__article-list
+	width: 100%
+	&__list
+		position: relative
+		display: inline-block
+		vertical-align: top
+		padding: 0 1.5rem
+		width: 50%
 		& ul
 			margin-left: 16px
+	&__add-form
+		position: relative
+		display: inline-block
+		vertical-align: top
+		padding: 0 1.5rem
+		width: 50%
 	&__form
 		position: absolute
 		top: 8.5rem
-		right: 3rem
+		right: 0
 		background: #f7f7f7
 		max-width: 500px
 		width: 100%
@@ -33,6 +45,10 @@
 		& .form
 			border-radius: 0 0 4px 4px
 			padding: 2rem 2.5rem
+
+@media (max-width: 767px)
+	.kinoteka__form
+		left: 0
 
 .title
 	display: table
