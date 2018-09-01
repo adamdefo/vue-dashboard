@@ -10,9 +10,6 @@ export default {
       api: '../api/',
       title: 'Кинотека',
       loading: false,
-      btnAdd: {
-        txt: 'Открыть форму'
-      },
       uploadFiles: [],
       cover: '',
       kinoteka: [],
@@ -31,23 +28,47 @@ export default {
       this.$http.get(this.api).then(function (response) {
         let data = response.data
         vm.kinoteka = data.list.slice()
-        this.loading = true
+        vm.loading = true
+        // vm.showNotification('<p>Фильмы загружены</p>')
       }, function (error) {
         console.log(error)
-        this.loading = true
+        vm.loading = true
       })
     },
     getFilm: function (film) {
+      let vm = this
+      this.uploadFiles = []
+      if (!film['cover']) {
+        this.getCoverFilm(film).then(function (response) {
+          let data = response.data
+          if (data.id) {
+            vm.cover = '/uploads/' + data.img
+            film['cover'] = '/uploads/' + data.img
+          } else {
+            vm.cover = ''
+          }
+        }, function (error) {
+          console.log(error)
+        })
+      } else {
+        vm.cover = film['cover']
+      }
+
       this.kinotekaItem = Object.assign({}, film)
       this.isShowForm = true
     },
     findFilmById: function (filmId) {
       let vm = this
       this.kinoteka.some(item => {
+        // return item.id.toString() === filmId
         if (item.id.toString() === filmId) {
           Object.assign(item, vm.kinotekaItem)
         }
       })
+    },
+    // запрашивает обложку для фильма
+    getCoverFilm: function (film) {
+      return this.$http.get(this.api + 'cover.service.php', { params: { action: 'get', filmId: film.id } })
     },
     save: function () {
       let vm = this
@@ -59,19 +80,26 @@ export default {
       this.$http.post(this.api, Object.assign(this.kinotekaItem, params)).then(response => {
         vm.loading = true
         let data = response.data
-        console.log(data.message)
-        this.findFilmById(this.kinotekaItem.id) // обновляю инфо у фильма
+        let filmId = data.filmId
+        let message = data.message
+
+        // обновляю инфо у фильма
+        vm.findFilmById(vm.kinotekaItem.id)
         // если нет id значит новый фильм
         if (!vm.kinotekaItem.id) {
-          vm.kinotekaItem.id = data.filmId
+          vm.kinotekaItem.id = filmId
           vm.kinoteka.unshift(vm.kinotekaItem)
-          let formData = new FormData()
-          formData.append('file', vm.uploadFiles[0])
-          formData.append('filmId', data.filmId)
-          vm.$http.post(vm.api + 'upload.service.php', formData).then(upload => {
-            console.log(upload)
-          })
+          if (vm.uploadFiles.length) {
+            vm.uploadImage(filmId)
+          }
+        } else {
+          if (vm.uploadFiles.length) {
+            vm.uploadImage(filmId).then(response => {
+              console.log(response.data.responseText)
+            })
+          }
         }
+        vm.showNotification(message)
       }, error => {
         console.log(error)
         vm.loading = true
@@ -90,17 +118,6 @@ export default {
     },
     closeForm: function () {
       this.isShowForm = false
-
-      let notification = new Notification({
-        message: '<p>Привет)</p>',
-        layout: 'growl',
-        effect: 'scale',
-        type: 'notice', // notice, warning, error or success
-        onClose: () => {
-          console.log('AAAAAAAAAAA')
-        }
-      })
-      notification.show()
     },
     // реагирует на изменение загрузчика
     changeUploader: function (e) {
@@ -119,13 +136,31 @@ export default {
       }
       fr.readAsDataURL(file)
     },
+    uploadImage: function (filmId) {
+      let formData = new FormData()
+      formData.append('file', this.uploadFiles[0])
+      formData.append('filmId', filmId)
+      return this.$http.post(this.api + 'upload.service.php', formData)
+    },
     // очищает загрузчик
-    clearUploader: function (e) {
+    clearUploader: function () {
       this.cover = ''
+    },
+    // выводит уведомление
+    showNotification: function (message, effect = 'scale', type = 'notice') {
+      let notification = new Notification({
+        message,
+        layout: 'growl',
+        effect,
+        type, // notice, warning, error or success
+        onClose: () => {}
+      })
+      notification.show()
     }
   },
   created: function () {
-    // this.getFilms()
+    // получаю список фильмов
+    this.getFilms()
   },
   mounted: function () {},
   computed: {

@@ -87,7 +87,7 @@ class Notification {
   }
 
   /**
-   * показать notification
+   * показать
    */
   show () {
     this.active = true
@@ -97,7 +97,7 @@ class Notification {
   }
 
   /**
-   * закрыть notification
+   * закрыть
    */
   close () {
     let self = this

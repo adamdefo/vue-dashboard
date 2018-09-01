@@ -13,6 +13,10 @@ export default {
     return {
       navLinks: [
         {
+          title: 'Блог',
+          href: '/blog'
+        },
+        {
           title: 'Кинотека',
           href: '/kinoteka'
         }

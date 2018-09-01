@@ -1,53 +1,58 @@
 <div class="kinoteka">
   <div class="title">
-    <i class="icon-notebook"></i>
-    <h1>{{ title }}</h1>
+    <i class="icon icon-notebook"></i>
+    <h1 class="ttl">{{ title }}</h1>
     <div class="title__links">
-      <button @click="addNewFilm">
-        <span>Добавить фильм</span>
-      </button>
+      <button @click="addNewFilm"><span>Добавить</span></button>
     </div>
   </div>
-  <div class="kinoteka__list">
-    <ul>
-      <li v-for="item in kinoteka" :key="item.id">
-        <a @click.prevent="getFilm(item)"><span>{{ item.name }}</span></a>
-      </li>
-    </ul>
-  </div>
-  <div class="kinoteka__add-form">
+  <div class="kinoteka__container">
+    <div class="kinoteka__list">
+      <ul>
+        <li v-for="item in kinoteka" :key="item.id">
+          <a @click.prevent="getFilm(item)"><span>{{ item.name }}</span></a>
+        </li>
+      </ul>
+    </div>
     <div v-if="isShowForm" class="kinoteka__form">
-      <div class="kinoteka__form-header">
-        <div class="ttl">{{ kinotekaItem.name }}</div>
-        <button class="btn-close" @click="closeForm">
-          <span>x</span>
-        </button>
-      </div>
-      <form class="form" method="post" @submit.prevent="save" enctype="multipart/form-data">
-        <div class="dropbox">
-          <div class="dropbox__image"><img :src="cover" /></div>
-          <input class="dropbox__input" type="file" name="uploader" accept="image/*" multiple @change="changeUploader" />
+      <form class="form form_add" method="post" @submit.prevent="save" enctype="multipart/form-data">
+        <div class="form__header">
+          <div class="ttl" :title="kinotekaItem.name">{{ kinotekaItem.name }}</div>
+          <button type="button" class="btn-close" @click="closeForm"><span>x</span></button>
         </div>
-        <div class="form__group">
-          <div class="form__group-item">
-            <label class="form__label">Название</label>
-            <input class="form__input" type="text" v-model="kinotekaItem.name" />
+        <div class="form__fields">
+          <div class="dropbox">
+            <div class="dropbox__image">
+              <img :src="cover" />
+              <div v-if="cover">
+                <button type="button" @click="clearUploader"><span>Удалить</span></button>
+              </div>
+            </div>
+            <div v-if="!cover">
+              <input class="dropbox__input" type="file" name="uploader" accept="image/*" multiple @change="changeUploader" />
+            </div>
           </div>
-        </div>
-        <div class="form__group">
-          <div class="form__group-item">
-            <label class="form__label">Год выпуска</label>
-            <input class="form__input" type="text" v-model="kinotekaItem.year" />
+          <div class="form__group">
+            <div class="form__group-item">
+              <label class="form__label">Название</label>
+              <input class="form__input" type="text" v-model="kinotekaItem.name" :title="kinotekaItem.name" />
+            </div>
           </div>
-        </div>
-        <div class="form__group">
-          <div class="form__group-item">
-            <label class="form__label">Описание</label>
-            <textarea class="form__input form__input_txt" type="text" v-model="kinotekaItem.content"></textarea>
+          <div class="form__group">
+            <div class="form__group-item">
+              <label class="form__label">Год выпуска</label>
+              <input class="form__input" type="text" v-model="kinotekaItem.year" />
+            </div>
           </div>
-        </div>
-        <div class="form__group form__group_btn">
-          <button class="btn" type="submit" :disabled="!isValid">Сохранить</button>
+          <div class="form__group">
+            <div class="form__group-item">
+              <label class="form__label">Описание</label>
+              <textarea class="form__input form__input_txt" type="text" v-model="kinotekaItem.content"></textarea>
+            </div>
+          </div>
+          <div class="form__group form__group_btn">
+            <button class="btn" type="submit" :disabled="!isValid">Сохранить</button>
+          </div>
         </div>
       </form>
     </div>
