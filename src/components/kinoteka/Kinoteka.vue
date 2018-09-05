@@ -119,8 +119,6 @@ export default {
     },
     closeForm: function () {
       this.isShowForm = false
-<<<<<<< HEAD
-=======
 
       let message = '<p>Форма закрыта</p>'
       this.createNotification(message)
@@ -138,7 +136,6 @@ export default {
         type: type // notice, warning, error or success
       })
       this.notification.show()
->>>>>>> 9fe2f58f9fa1c7523138bfe26dcc70215abf168c
     },
     // реагирует на изменение загрузчика
     changeUploader: function (e) {
