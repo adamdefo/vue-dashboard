@@ -1,10 +1,10 @@
 <template src="./Lessons.tmpl.html"></template>
 
 <script>
-import Notification from './../../notification'
+import Notification from './../core/notification'
 
 export default {
-  name: 'Blog',
+  name: 'Lessons',
   data: () => {
     return {
       api: '../api/',
@@ -32,9 +32,13 @@ export default {
         vm.loading = true
       })
     },
-    addPost: function (post) {
-      this.post = Object.assign({}, post)
+    addPost: function () {
       this.isShowForm = true
+      this.post = {
+        id: null,
+        title: 'Новый пост',
+        content: ''
+      }
     },
     findPostById: function (postId) {
       let vm = this
@@ -58,7 +62,7 @@ export default {
         let postId = data.postId
         let message = data.message
         // обновляю инфо у фильма
-        vm.findPostById(vm.post.id) 
+        vm.findPostById(vm.post.id)
         // если нет id значит новый фильм
         if (!vm.post.id) {
           vm.post.id = postId
@@ -69,14 +73,6 @@ export default {
         console.log(error)
         vm.loading = true
       })
-    },
-    addPost: function () {
-      this.isShowForm = true
-      this.post = {
-        id: null,
-        title: 'Новый пост',
-        content: ''
-      }
     },
     closeForm: function () {
       this.isShowForm = false
