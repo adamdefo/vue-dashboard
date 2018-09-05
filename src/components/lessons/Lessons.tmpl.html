@@ -1,0 +1,43 @@
+<div class="kinoteka">
+  <div class="title">
+    <i class="icon icon-notebook"></i>
+    <h1 class="ttl">{{ title }}</h1>
+    <div class="title__links">
+      <button @click="addPost"><span>Добавить</span></button>
+    </div>
+  </div>
+  <div class="kinoteka__container">
+    <div class="kinoteka__list">
+      <ul>
+        <li v-for="item in listPosts" :key="item.id">
+          <a @click.prevent="getPost(item)"><span>{{ item.name }}</span></a>
+        </li>
+      </ul>
+    </div>
+    <div v-if="isShowForm" class="kinoteka__form">
+      <form class="form form_add" method="post" @submit.prevent="save">
+        <div class="form__header">
+          <div class="ttl" :title="post.name">{{ post.name }}</div>
+          <button type="button" class="btn-close" @click="closeForm"><span>x</span></button>
+        </div>
+        <div class="form__fields">
+          <div class="form__group">
+            <div class="form__group-item">
+              <label class="form__label">Заголовок</label>
+              <input class="form__input" type="text" v-model="post.name" :title="post.name" />
+            </div>
+          </div>
+          <div class="form__group">
+            <div class="form__group-item">
+              <label class="form__label">Содержимое</label>
+              <textarea class="form__input form__input_txt" type="text" v-model="post.content"></textarea>
+            </div>
+          </div>
+          <div class="form__group form__group_btn">
+            <button class="btn" type="submit" :disabled="!isValid">Сохранить</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

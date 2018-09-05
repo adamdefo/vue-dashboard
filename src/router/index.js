@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Auth from '@/components/auth/Auth'
 // import Hello from '@/components/Hello'
+import Blog from '@/components/blog/Blog'
 import Lessons from '@/components/lessons/Lessons'
 import Kinoteka from '@/components/kinoteka/Kinoteka'
 
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'Auth',
       component: Auth
+    },
+    {
+      path: '/blog',
+      name: 'Blog',
+      component: Blog
     },
     {
       path: '/lessons',
