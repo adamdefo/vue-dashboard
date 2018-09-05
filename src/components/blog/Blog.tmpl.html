@@ -9,22 +9,22 @@
   <div class="kinoteka__container">
     <div class="kinoteka__list">
       <ul>
-        <li v-for="item in listPosts" :key="item.id">
-          <a @click.prevent="getPost(item)"><span>{{ item.name }}</span></a>
+        <li v-for="post in listPosts" :key="post.id">
+          <a @click.prevent="getPost(post)"><span>{{ post.title }}</span></a>
         </li>
       </ul>
     </div>
     <div v-if="isShowForm" class="kinoteka__form">
       <form class="form form_add" method="post" @submit.prevent="save">
         <div class="form__header">
-          <div class="ttl" :title="post.name">{{ post.name }}</div>
+          <div class="ttl" :title="post.title">{{ post.title }}</div>
           <button type="button" class="btn-close" @click="closeForm"><span>x</span></button>
         </div>
         <div class="form__fields">
           <div class="form__group">
             <div class="form__group-item">
               <label class="form__label">Заголовок</label>
-              <input class="form__input" type="text" v-model="post.name" :title="post.name" />
+              <input class="form__input" type="text" v-model="post.title" :title="post.title" />
             </div>
           </div>
           <div class="form__group">

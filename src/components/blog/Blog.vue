@@ -22,7 +22,7 @@ export default {
   methods: {
     getAllPosts: function () {
       let vm = this
-      this.$http.get(this.api).then(function (res) {
+      this.$http.get(this.api + 'blog.service.php').then(function (res) {
         let data = res.data
         vm.listPosts = data.list.slice()
         vm.loading = true
@@ -31,6 +31,10 @@ export default {
         console.log(error)
         vm.loading = true
       })
+    },
+    getPost: function (post) {
+      this.post = Object.assign({}, post)
+      this.isShowForm = true
     },
     addPost: function () {
       this.isShowForm = true
